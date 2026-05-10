@@ -5,6 +5,22 @@ cloud.init({
 
 const db = cloud.database();
 
+// 内容安全审核，返回 true 表示违规
+const checkContent = async (content, scene, openid) => {
+  try {
+    const res = await cloud.openapi.security.msgSecCheck({
+      content,
+      version: 2,
+      scene,
+      openid,
+    });
+    return res.result.suggest !== "pass";
+  } catch (e) {
+    // API 不可用时放行（如个人主体无权限）
+    return false;
+  }
+};
+
 // 获取openid
 const getOpenId = async () => {
   const wxContext = cloud.getWXContext();
@@ -43,6 +59,12 @@ const getPhoneNumber = async (event) => {
 // 写入提交数据
 const addUserData = async (event) => {
   const wxContext = cloud.getWXContext();
+  const openid = wxContext.OPENID;
+
+  if (await checkContent(event.content, 2, openid)) {
+    return { success: false, errMsg: "内容不合规，请修改" };
+  }
+
   try {
     await db.createCollection("users");
   } catch (e) {
@@ -81,6 +103,10 @@ const getUserData = async () => {
 const saveUser = async (event) => {
   const wxContext = cloud.getWXContext();
   const openid = wxContext.OPENID;
+
+  if (await checkContent(event.nickName, 1, openid)) {
+    return { success: false, errMsg: "内容不合规，请修改" };
+  }
 
   try {
     await db.createCollection("users");

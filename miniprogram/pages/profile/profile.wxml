@@ -5,6 +5,7 @@
     <text class="name">{{displayName}}</text>
   </view>
 
+  <!-- 登录弹窗 -->
   <view class="popup-mask" wx:if="{{showLoginPopup}}" bindtap="onHideLoginPopup"></view>
   <view class="popup {{showLoginPopup ? 'popup-visible' : ''}}">
     <view class="popup-title">欢迎登录</view>
@@ -38,6 +39,32 @@
         <text wx:if="{{agreed}}">✓</text>
       </view>
       <text class="agree-text">请您同意</text>
+    </view>
+  </view>
+
+  <!-- 修改资料弹窗 -->
+  <view class="popup-mask" wx:if="{{showEditPopup}}" bindtap="onHideEditPopup"></view>
+  <view class="popup {{showEditPopup ? 'popup-visible' : ''}}">
+    <view class="popup-title">修改资料</view>
+
+    <button class="avatar-picker" open-type="chooseAvatar" bindchooseavatar="onChooseEditAvatar">
+      <image wx:if="{{editAvatarUrl}}" class="preview-avatar" src="{{editAvatarUrl}}" mode="aspectFill" />
+      <view wx:else class="preview-avatar preview-placeholder"></view>
+      <text class="avatar-hint">点击更换头像</text>
+    </button>
+
+    <view class="nickname-wrap">
+      <input
+        class="nickname-input"
+        type="nickname"
+        placeholder="请输入昵称"
+        value="{{editNickName}}"
+        bindinput="onEditNicknameInput"
+      />
+    </view>
+
+    <view class="confirm-btn-wrap">
+      <button class="confirm-btn" bindtap="onSaveProfile">保存</button>
     </view>
   </view>
 

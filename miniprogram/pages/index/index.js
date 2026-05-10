@@ -34,7 +34,7 @@ Page({
           wx.showToast({ title: "提交成功" });
           this.setData({ inputContent: "" });
         } else {
-          wx.showToast({ title: "提交失败", icon: "none" });
+          wx.showToast({ title: resp.result.errMsg || "提交失败", icon: "none" });
         }
       })
       .catch(() => {
