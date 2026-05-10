@@ -27,7 +27,7 @@ Page({
 
   onShow() {
     if (typeof this.getTabBar === "function" && this.getTabBar()) {
-      this.getTabBar().setData({ selected: 1 });
+      this.getTabBar().setData({ selected: 2 });
     }
   },
 
@@ -162,6 +162,13 @@ Page({
         wx.hideLoading();
         wx.showToast({ title: "保存失败", icon: "none" });
       });
+  },
+
+  // ========== 导航 ==========
+
+  onNavToSection(e) {
+    const type = e.currentTarget.dataset.type;
+    wx.navigateTo({ url: "/pages/order-list/order-list?type=" + type });
   },
 
   // ========== 退出登录 ==========

@@ -1,8 +1,10 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/post/post",
+    "pages/profile/profile",
     "pages/show/show",
-    "pages/profile/profile"
+    "pages/order-list/order-list"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",
@@ -16,7 +18,11 @@
     "list": [
       {
         "pagePath": "pages/index/index",
-        "text": "数据"
+        "text": "需求池"
+      },
+      {
+        "pagePath": "pages/post/post",
+        "text": "发单"
       },
       {
         "pagePath": "pages/profile/profile",

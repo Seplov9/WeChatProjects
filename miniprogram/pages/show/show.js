@@ -1,25 +1,27 @@
 Page({
   data: {
-    list: [],
+    order: null,
   },
 
-  onShow() {
-    this.fetchData();
+  onLoad(options) {
+    if (options && options.orderId) {
+      this.loadOrder(options.orderId);
+    }
   },
 
-  fetchData() {
+  loadOrder(orderId) {
     wx.showLoading({ title: "加载中..." });
     wx.cloud
       .callFunction({
         name: "quickstartFunctions",
-        data: {
-          type: "getUserData",
-        },
+        data: { type: "getOrderById", orderId },
       })
       .then((resp) => {
         wx.hideLoading();
         if (resp.result.success) {
-          this.setData({ list: resp.result.data });
+          const o = resp.result.data;
+          o.createdAt = this.formatTime(o.createdAt);
+          this.setData({ order: o });
         } else {
           wx.showToast({ title: "加载失败", icon: "none" });
         }
@@ -28,5 +30,18 @@ Page({
         wx.hideLoading();
         wx.showToast({ title: "加载失败", icon: "none" });
       });
+  },
+
+  formatTime(date) {
+    if (!date) return "";
+    const d = new Date(date);
+    const pad = (n) => String(n).padStart(2, "0");
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  },
+
+  onPreviewImage(e) {
+    const url = e.currentTarget.dataset.url;
+    const urls = this.data.order.images || [];
+    wx.previewImage({ current: url, urls });
   },
 });

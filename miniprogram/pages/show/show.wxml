@@ -1,13 +1,43 @@
-<view class="container">
-  <view class="title">数据列表</view>
-  <view wx:if="{{list.length === 0}}" class="empty">暂无数据</view>
-  <view wx:else class="list">
-    <view class="item" wx:for="{{list}}" wx:key="_id">
-      <view class="item-meta">
-        <text class="item-user">用户：{{item.userId}}</text>
-        <text class="item-time">{{item.inputTime}}</text>
-      </view>
-      <view class="item-content">{{item.inputContent}}</view>
+<view class="page" wx:if="{{order}}">
+  <!-- 图片轮播 -->
+  <view class="image-area" wx:if="{{order.images && order.images.length > 0}}">
+    <swiper class="image-swiper" indicator-dots indicator-color="rgba(255,255,255,0.5)" indicator-active-color="#fff">
+      <swiper-item wx:for="{{order.images}}" wx:key="index">
+        <image class="swiper-image" src="{{item}}" mode="aspectFill" bindtap="onPreviewImage" data-url="{{item}}" />
+      </swiper-item>
+    </swiper>
+  </view>
+
+  <!-- 头部信息 -->
+  <view class="detail-card">
+    <view class="detail-category-row">
+      <text class="detail-category">{{order.category}}</text>
+      <text class="detail-reward">¥{{order.reward}}</text>
+    </view>
+    <view class="detail-title">{{order.title}}</view>
+    <view class="detail-content">{{order.content}}</view>
+
+    <!-- 发布者 -->
+    <view class="detail-divider"></view>
+    <view class="detail-publisher">
+      <image wx:if="{{order.publisherAvatar}}" class="publisher-avatar" src="{{order.publisherAvatar}}" mode="aspectFill" />
+      <view wx:else class="publisher-avatar publisher-avatar-empty"></view>
+      <text class="publisher-name">{{order.publisherName || '匿名'}}</text>
+    </view>
+
+    <!-- 联系信息 -->
+    <view class="detail-divider"></view>
+    <view class="detail-info-row">
+      <text class="detail-label">联系方式</text>
+      <text class="detail-value">{{order.contact}}</text>
+    </view>
+    <view class="detail-info-row" wx:if="{{order.city}}">
+      <text class="detail-label">城市</text>
+      <text class="detail-value">{{order.city}}</text>
+    </view>
+    <view class="detail-info-row">
+      <text class="detail-label">发布时间</text>
+      <text class="detail-value">{{order.createdAt}}</text>
     </view>
   </view>
 </view>
