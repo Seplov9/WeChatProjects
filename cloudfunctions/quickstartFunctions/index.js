@@ -138,6 +138,18 @@ const saveUser = async (event) => {
         },
       });
     }
+
+    // 同步更新该用户所有订单中的昵称和头像
+    await db
+      .collection("orders")
+      .where({ publisherId: openid })
+      .update({
+        data: {
+          publisherName: event.nickName,
+          publisherAvatar: event.avatarUrl,
+        },
+      });
+
     return { success: true, openid };
   } catch (e) {
     return { success: false, errMsg: e.message };
@@ -244,17 +256,22 @@ const updateOrder = async (event) => {
   }
 };
 
-// 查询需求池
-const getOrders = async () => {
+// 查询需求池（分页）
+const getOrders = async (event) => {
+  const skip = event.skip || 0;
+  const pageSize = event.pageSize || 10;
   try {
     const result = await db
       .collection("orders")
       .where({ status: "active" })
       .orderBy("boost", "desc")
       .orderBy("createdAt", "desc")
-      .limit(50)
+      .skip(skip)
+      .limit(pageSize + 1)
       .get();
-    return { success: true, data: result.data };
+    const hasMore = result.data.length > pageSize;
+    if (hasMore) result.data.pop();
+    return { success: true, data: result.data, hasMore };
   } catch (e) {
     return { success: false, errMsg: e.message };
   }
@@ -268,6 +285,20 @@ const getMyOrders = async () => {
     const result = await db
       .collection("orders")
       .where({ publisherId: openid })
+      .orderBy("createdAt", "desc")
+      .get();
+    return { success: true, data: result.data };
+  } catch (e) {
+    return { success: false, errMsg: e.message };
+  }
+};
+
+// 查询指定发布者的有效订单
+const getPublisherOrders = async (event) => {
+  try {
+    const result = await db
+      .collection("orders")
+      .where({ publisherId: event.publisherId, status: "active" })
       .orderBy("createdAt", "desc")
       .get();
     return { success: true, data: result.data };
@@ -387,7 +418,7 @@ exports.main = async (event, context) => {
     case "createOrder":
       return await createOrder(event);
     case "getOrders":
-      return await getOrders();
+      return await getOrders(event);
     case "getMyOrders":
       return await getMyOrders();
     case "toggleFavorite":
@@ -402,6 +433,8 @@ exports.main = async (event, context) => {
       return await getOrderById(event);
     case "updateOrder":
       return await updateOrder(event);
+    case "getPublisherOrders":
+      return await getPublisherOrders(event);
     case "cancelOrder":
       return await cancelOrder(event);
   }

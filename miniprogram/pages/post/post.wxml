@@ -108,6 +108,6 @@
       <button class="cancel-btn submit-btn-half" bindtap="cancelOrder">撤销发布</button>
     </view>
     <button class="submit-btn" wx:else bindtap="submitOrder">立即发布</button>
-    <view class="submit-hint" wx:if="{{!editId}}">发布后需求将进入需求池，所有会员可见</view>
+    <view class="submit-hint" wx:if="{{!editId}}">发布后需求将进入信息池，所有会员可见</view>
   </view>
 </view>

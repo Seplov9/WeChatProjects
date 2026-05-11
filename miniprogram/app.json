@@ -4,6 +4,7 @@
     "pages/post/post",
     "pages/profile/profile",
     "pages/show/show",
+    "pages/publisher/publisher",
     "pages/order-list/order-list"
   ],
   "window": {
@@ -18,7 +19,7 @@
     "list": [
       {
         "pagePath": "pages/index/index",
-        "text": "需求池"
+        "text": "信息池"
       },
       {
         "pagePath": "pages/post/post",

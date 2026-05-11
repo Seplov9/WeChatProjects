@@ -37,7 +37,11 @@ Page({
     orders: [],
     filteredOrders: [],
     favoritedIds: {},
+    hasMore: true,
+    loadingMore: false,
   },
+
+  PAGE_SIZE: 10,
 
   onlineCategories: [
     "游戏陪玩", "线上教学", "咨询规划", "设计制作", "其他线上",
@@ -58,7 +62,11 @@ Page({
       this.getTabBar().setData({ selected: 0 });
     }
     this.fetchFavorites();
-    this.fetchOrders();
+    this.fetchOrders(true);
+  },
+
+  onReachBottom() {
+    this.fetchOrders(false);
   },
 
   fetchFavorites() {
@@ -79,26 +87,37 @@ Page({
       .catch(() => {});
   },
 
-  fetchOrders() {
-    wx.showLoading({ title: "加载中..." });
+  fetchOrders(reset) {
+    if (reset) {
+      this.setData({ orders: [], filteredOrders: [], hasMore: true, loadingMore: false });
+      wx.showLoading({ title: "加载中..." });
+    } else {
+      if (!this.data.hasMore || this.data.loadingMore) return;
+      this.setData({ loadingMore: true });
+    }
+
+    const skip = reset ? 0 : this.data.orders.length;
+
     wx.cloud
       .callFunction({
         name: "quickstartFunctions",
-        data: { type: "getOrders" },
+        data: { type: "getOrders", skip, pageSize: this.PAGE_SIZE },
       })
       .then((resp) => {
         wx.hideLoading();
         if (resp.result.success) {
-          const orders = resp.result.data.map((item) => ({
+          const newOrders = resp.result.data.map((item) => ({
             ...item,
             createdAt: this.formatTime(item.createdAt),
           }));
-          this.setData({ orders });
+          const orders = reset ? newOrders : this.data.orders.concat(newOrders);
+          this.setData({ orders, hasMore: resp.result.hasMore, loadingMore: false });
           this.applyFilters();
         }
       })
       .catch(() => {
         wx.hideLoading();
+        this.setData({ loadingMore: false });
         wx.showToast({ title: "加载失败", icon: "none" });
       });
   },

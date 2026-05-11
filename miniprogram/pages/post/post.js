@@ -252,7 +252,7 @@ Page({
     if (!editId) return;
     wx.showModal({
       title: "确认撤销",
-      content: "撤销后该需求将不再显示在需求池中，此操作不可恢复。",
+      content: "撤销后该需求将不再显示在信息池中，此操作不可恢复。",
       success: (res) => {
         if (!res.confirm) return;
         wx.showLoading({ title: "撤销中..." });

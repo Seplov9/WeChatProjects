@@ -170,3 +170,20 @@
   font-size: 28rpx;
   padding-top: 120rpx;
 }
+
+/* 加载更多 */
+.load-more {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 32rpx 0 48rpx;
+}
+
+.load-more-text {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.load-more-end {
+  color: #ccc;
+}

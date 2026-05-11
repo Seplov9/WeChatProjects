@@ -44,4 +44,12 @@ Page({
     const urls = this.data.order.images || [];
     wx.previewImage({ current: url, urls });
   },
+
+  onTapPublisher() {
+    const o = this.data.order;
+    if (!o || !o.publisherId) return;
+    wx.navigateTo({
+      url: `/pages/publisher/publisher?publisherId=${o.publisherId}&publisherName=${encodeURIComponent(o.publisherName || '')}&publisherAvatar=${encodeURIComponent(o.publisherAvatar || '')}`,
+    });
+  },
 });

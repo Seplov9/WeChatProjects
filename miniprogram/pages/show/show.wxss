@@ -72,6 +72,11 @@
 .detail-publisher {
   display: flex;
   align-items: center;
+  padding: 8rpx 0;
+}
+
+.detail-publisher:active {
+  opacity: 0.6;
 }
 
 .publisher-avatar {
@@ -88,6 +93,13 @@
 .publisher-name {
   font-size: 28rpx;
   color: #333;
+  flex: 1;
+}
+
+.publisher-arrow {
+  font-size: 36rpx;
+  color: #ccc;
+  font-weight: 300;
 }
 
 /* 信息行 */

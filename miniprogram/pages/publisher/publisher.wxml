@@ -1,0 +1,27 @@
+<view class="page" wx:if="{{!loading}}">
+  <!-- 发布者信息 -->
+  <view class="publisher-header">
+    <image wx:if="{{avatar}}" class="header-avatar" src="{{avatar}}" mode="aspectFill" />
+    <view wx:else class="header-avatar header-avatar-empty"></view>
+    <view class="header-name">{{name || '匿名'}}</view>
+    <view class="header-count">共 {{orders.length}} 个发单</view>
+  </view>
+
+  <!-- 订单列表 -->
+  <view class="order-list">
+    <view class="card" wx:for="{{orders}}" wx:key="_id" bindtap="onCardTap" data-index="{{index}}">
+      <image wx:if="{{item.images && item.images.length > 0}}" class="card-image" src="{{item.images[0]}}" mode="aspectFill" />
+      <view class="card-top">
+        <text class="card-category">{{item.category}}</text>
+        <text class="card-reward">¥{{item.reward}}</text>
+      </view>
+      <view class="card-title">{{item.title}}</view>
+      <view class="card-content">{{item.content}}</view>
+      <view class="card-bottom">
+        <text class="card-city" wx:if="{{item.city}}">{{item.city}}</text>
+        <text class="card-time">{{item.createdAt}}</text>
+      </view>
+    </view>
+    <view wx:if="{{orders.length === 0}}" class="empty">暂无发单</view>
+  </view>
+</view>

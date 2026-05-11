@@ -55,5 +55,11 @@
       </view>
     </view>
     <view wx:if="{{filteredOrders.length === 0}}" class="empty">暂无需求</view>
+
+    <view class="load-more" wx:if="{{filteredOrders.length > 0}}">
+      <view wx:if="{{loadingMore}}" class="load-more-text">加载中...</view>
+      <view wx:elif="{{hasMore}}" class="load-more-text">上拉加载更多</view>
+      <view wx:else class="load-more-text load-more-end">— 已加载全部 —</view>
+    </view>
   </view>
 </view>

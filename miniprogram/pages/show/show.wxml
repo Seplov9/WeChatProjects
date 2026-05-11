@@ -19,10 +19,11 @@
 
     <!-- 发布者 -->
     <view class="detail-divider"></view>
-    <view class="detail-publisher">
+    <view class="detail-publisher" bindtap="onTapPublisher">
       <image wx:if="{{order.publisherAvatar}}" class="publisher-avatar" src="{{order.publisherAvatar}}" mode="aspectFill" />
       <view wx:else class="publisher-avatar publisher-avatar-empty"></view>
       <text class="publisher-name">{{order.publisherName || '匿名'}}</text>
+      <text class="publisher-arrow">›</text>
     </view>
 
     <!-- 联系信息 -->
